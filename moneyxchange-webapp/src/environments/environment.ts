@@ -3,7 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  api: 'https://localhost:8000/api/',
+  cache: {
+    rates: {
+      ttl: 60
+    }
+  }
 };
 
 /*
