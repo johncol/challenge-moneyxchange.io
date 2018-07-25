@@ -2,15 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { CalculatorComponent } from './components/calculator/calculator.component';
-import { CalculatorService } from './services/calculator/calculator.service';
 import { TextMaskModule } from 'angular2-text-mask';
+import { SharedModule } from '../shared/shared.module';
+
+import { CalculatorComponent } from './components/calculator';
+import { CalculatorService } from './services/calculator';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TextMaskModule
+    TextMaskModule,
+    SharedModule
   ],
   providers: [
     CalculatorService

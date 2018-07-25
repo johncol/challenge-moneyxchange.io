@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SocialLinksComponent } from './components/social-links';
 import { NotificationComponent } from './components/notification';
 import { LoaderComponent } from './components/loader';
+import { AvoidSubmitOnEnterDirective } from './directives/avoid-submit-on-enter';
 import { StorageService, LocalStorageService } from './services/storage';
 
 @NgModule({
@@ -13,12 +14,14 @@ import { StorageService, LocalStorageService } from './services/storage';
   declarations: [
     SocialLinksComponent,
     NotificationComponent,
-    LoaderComponent
+    LoaderComponent,
+    AvoidSubmitOnEnterDirective
   ],
   exports: [
     SocialLinksComponent,
     NotificationComponent,
-    LoaderComponent
+    LoaderComponent,
+    AvoidSubmitOnEnterDirective
   ],
   providers: [
     { provide: StorageService, useClass: LocalStorageService }
