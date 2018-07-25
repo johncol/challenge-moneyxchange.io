@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api: 'https://localhost:8000/api/',
+  api: 'http://localhost:8000/api/v1/',
   cache: {
     rates: {
       ttl: 60

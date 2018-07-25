@@ -1,12 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { Valuta, AVAILABLE_VALUTAS } from '../../../shared/models';
 import { CalculatorService } from '../../services/calculator';
 import { NotificationService } from '../../../shared/services/notification';
 import { LoaderService } from '../../../shared/services/loader';
-import { MaskBuilderService } from '../../../shared/services/mask-builder';
+import { CurrencyMaskService } from '../../../shared/services/mask';
 
 @Component({
   selector: 'mxc-calculator',
@@ -17,25 +22,25 @@ export class CalculatorComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   form: FormGroup;
+  sourceField: AbstractControl;
+  targetField: AbstractControl;
 
   source: Valuta = AVAILABLE_VALUTAS.USD;
   target: Valuta = AVAILABLE_VALUTAS.EUR;
-  sourceMask = this.maskBuilder.createMask({ prefix: this.source.symbol });
-  targetMask = this.maskBuilder.createMask({ prefix: this.target.symbol });
+  sourceMask = this.maskService.createMask({ prefix: this.source.symbol });
+  targetMask = this.maskService.createMask({ prefix: this.target.symbol });
 
   constructor(
-    public service: CalculatorService,
-    private maskBuilder: MaskBuilderService,
+    private service: CalculatorService,
+    private maskService: CurrencyMaskService,
     private formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private loader: LoaderService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.form = this.formBuilder.group({
-      source: [null, [Validators.required, Validators.min(1)]],
-      target: [{ value: null, disabled: true }]
-    });
+    this.initFormFields();
+    this.clearTargetWhenSourceChanges();
   }
 
   ngOnDestroy(): void {
@@ -53,8 +58,24 @@ export class CalculatorComponent implements OnInit, OnDestroy {
     this.subscriptions.push(subscription);
   }
 
+  private initFormFields(): void {
+    this.form = this.formBuilder.group({
+      source: [null, [Validators.required, Validators.min(1)]],
+      target: [{ value: null, disabled: true }]
+    });
+    this.sourceField = this.form.get('source');
+    this.targetField = this.form.get('target');
+  }
+
+  private clearTargetWhenSourceChanges(): void {
+    const subscription: Subscription = this.sourceField.valueChanges.subscribe(
+      () => this.targetField.setValue('')
+    );
+    this.subscriptions.push(subscription);
+  }
+
   private getSourceValue(): number {
-    return Number(this.form.get('source').value);
+    return this.maskService.unmask(this.sourceField.value);
   }
 
   private handleSuccessResponse(targetValue: number): void {
@@ -69,7 +90,7 @@ export class CalculatorComponent implements OnInit, OnDestroy {
   }
 
   private updateTargetFieldValue(targetValue: number): void {
-    this.form.get('target').setValue(targetValue);
+    this.targetField.setValue(targetValue);
   }
 
   private showErrorNotification(): void {

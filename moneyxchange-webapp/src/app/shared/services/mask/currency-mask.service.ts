@@ -6,7 +6,7 @@ import { CurrencyMaskOptions } from '../../models';
 @Injectable({
   providedIn: 'root'
 })
-export class MaskBuilderService {
+export class CurrencyMaskService {
   private readonly defaultCurrencyOptions: CurrencyMaskOptions = {
     prefix: '$',
     suffix: '',
@@ -26,5 +26,13 @@ export class MaskBuilderService {
       ...this.defaultCurrencyOptions,
       ...options
     });
+  }
+
+  unmask(value: string, thousandsSeparatorSymbol: string = this.defaultCurrencyOptions.thousandsSeparatorSymbol): number {
+    const match: any = value.match(/\d/);
+    if (!match || !match.index) {
+      return 0;
+    }
+    return Number(value.substr(match.index).replace(new RegExp(thousandsSeparatorSymbol, 'g'), ''));
   }
 }

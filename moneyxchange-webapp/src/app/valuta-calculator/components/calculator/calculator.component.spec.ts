@@ -6,7 +6,7 @@ import { NotificationService } from '../../../shared/services/notification';
 import { LoaderService } from '../../../shared/services/loader';
 import { CalculatorService } from '../../services/calculator';
 import { Valuta } from '../../../shared/models';
-import { MaskBuilderService } from '../../../shared/services/mask-builder';
+import { CurrencyMaskService } from '../../../shared/services/mask';
 
 class CalculatorServiceMock extends CalculatorService {
   constructor() {
@@ -20,7 +20,7 @@ class CalculatorServiceMock extends CalculatorService {
 
 describe('CalculatorComponent', () => {
   let calculatorComponent: CalculatorComponent;
-  let maskBuilder: MaskBuilderService;
+  let maskService: CurrencyMaskService;
   let service: CalculatorService;
   let formBuilder: FormBuilder;
   let notificationService: NotificationService;
@@ -28,11 +28,11 @@ describe('CalculatorComponent', () => {
 
   beforeEach(() => {
     service = new CalculatorServiceMock();
-    maskBuilder = new MaskBuilderService();
+    maskService = new CurrencyMaskService();
     formBuilder = new FormBuilder();
     notificationService = new NotificationService();
     loader = new LoaderService();
-    calculatorComponent = new CalculatorComponent(service, maskBuilder, formBuilder, notificationService, loader);
+    calculatorComponent = new CalculatorComponent(service, maskService, formBuilder, notificationService, loader);
   });
 
   it('should create new form when component is initialized', () => {
@@ -45,11 +45,11 @@ describe('CalculatorComponent', () => {
 
   it('should request target value calculation and update form when form is submitted', () => {
     calculatorComponent.ngOnInit();
-    calculatorComponent.form.get('source').setValue(100);
+    calculatorComponent.sourceField.setValue('$100');
 
     calculatorComponent.updateTargetValue();
 
-    const calculatedValue: number = calculatorComponent.form.get('target').value;
+    const calculatedValue: number = calculatorComponent.targetField.value;
 
     expect(calculatedValue).toBe(200);
   });
