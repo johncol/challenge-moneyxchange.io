@@ -1,10 +1,11 @@
 {
-  "name": "moneyxchange-webapp",
-  "version": "0.0.0",
+  "name": "moneyxchange.io",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-github-pages": "ng build --prod --base-href=/moneyxchange.io/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
