@@ -37,4 +37,6 @@ Start the app with:
 
     > ng serve -o
 
+It will start the webapp on port 4200.
+
 See the website on https://johncol.github.io/moneyxchange.io/index.html, I didn't have the time to deploy the API, but at least you can give it a look at the webapp.
