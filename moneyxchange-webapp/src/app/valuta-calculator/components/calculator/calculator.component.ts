@@ -48,19 +48,21 @@ export class CalculatorComponent implements OnInit, OnDestroy {
   }
 
   updateTargetValue(): void {
-    this.loader.displayLoader();
-    const subscription: Subscription = this.service
-      .calculateValue(this.source, this.target, this.getSourceValue())
-      .subscribe({
-        next: this.handleSuccessResponse.bind(this),
-        error: this.handleError.bind(this)
-      });
-    this.subscriptions.push(subscription);
+    if (this.form.valid) {
+      this.loader.displayLoader();
+      const subscription: Subscription = this.service
+        .calculateValue(this.source, this.target, this.getSourceValue())
+        .subscribe({
+          next: this.handleSuccessResponse.bind(this),
+          error: this.handleError.bind(this)
+        });
+      this.subscriptions.push(subscription);
+    }
   }
 
   private initFormFields(): void {
     this.form = this.formBuilder.group({
-      source: [null, [Validators.required, Validators.min(1)]],
+      source: [null, [Validators.required, Validators.min(0)]],
       target: [{ value: null, disabled: true }]
     });
     this.sourceField = this.form.get('source');
